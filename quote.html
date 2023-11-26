@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> inline | Quote Generator </title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
+        body {
+            font-family: Courier;
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            max-width: 70%; /* Menentukan lebar maksimal kontainer */
+            width: 100%; /* Menyesuaikan kontainer dengan lebar layar */
+            margin-top: -40px;
+        }
+        .quote {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;letter-spacing: 1px;
+        }
+        .author {
+            font-size: 1rem;
+            font-style: italic;
+            color: #888;
+        } 
+        .refresh-btn {
+            position: fixed;
+            left: 50%;
+            bottom: 90px;
+            color: black;
+            background: white;
+            cursor: pointer;
+            outline: none;
+            font-weight: bold;
+            border-radius: 5px; 
+            padding: 13px 20px;
+            border-radius: 15px;
+            transform: translateX(-50%);
+            box-shadow: 0 15px 30px rgba(52,87,220,0.2);
+            transition: all 0.3s ease;
+            font-family: Courier;
+        }
+
+        /* Style untuk menu kembali */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: Courier;
+            text-decoration: none;
+            color: inherit; /* Warisan warna teks dari elemen induk */              
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="beranda.html" class="back-button" onclick="rotateAndRedirect(event)">
+        <i class="fas fa-arrow-left"></i> Back
+    </a>
+
+    <h1 
+        style="
+            position: absolute; 
+            text-align: center;
+            top: 30px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            color: white;">Quote Generator
+    </h1>
+
+
+    <div class="container">
+        <div class="quote"></div>
+        <div class="author"></div>
+    </div>
+
+    <button class="refresh-btn" onclick="getQuote()" > Get New Quote </button>
+
+    <script>
+        const quoteElement = document.querySelector('.quote');
+        const authorElement = document.querySelector('.author');
+
+        function getQuote() {
+            fetch('https://api.quotable.io/random')
+                .then(response => response.json())
+                .then(data => {
+                    quoteElement.innerText = `“${data.content}”`;
+                    authorElement.innerText = `― ${data.author}`;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        window.addEventListener('load', getQuote);
+
+
+
+        // Fungsi untuk mengatur animasi putar dan mengarahkan ke halaman selanjutnya
+        function rotateAndRedirect(event) {
+            event.preventDefault(); // Menghentikan peristiwa klik agar navigasi tidak terjadi segera
+            const backButton = document.querySelector(".back-button");
+            
+            // Mengaktifkan animasi putar
+            backButton.style.transition = "transform 1s ease";
+            backButton.style.transform = "rotate(360deg)";
+
+            // Menunda navigasi ke halaman "beranda.html" untuk memberikan efek animasi
+            setTimeout(function() {
+                window.location.href = backButton.getAttribute("href");
+            }, 1000); // Waktu dalam milidetik (1 detik untuk animasi putar)
+        }
+    </script>
+</body>
+</html>

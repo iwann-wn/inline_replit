@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> inline | Tip Calculator </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: Courier;
+            background-color: black;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            margin-top: 80px;
+             
+        }
+
+        .heading {
+            text-align: center;
+            font-family: Courier;
+            margin-top: -15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            font-family: Courier;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            font-family: Courier;
+        }
+
+        input[type="number"] {
+            width: 98%; 
+            border: 2px solid black;
+            border-radius: 5px; 
+            height: 37px; 
+            display: flex;
+            margin-top: 5px;
+            font-family: Courier;
+        }
+        input[type="number"]:focus {
+            outline: none; /* Menghilangkan outline default */
+            border-color: [warna-pilihan-anda]; /* Ganti dengan warna yang Anda inginkan */
+        }
+
+
+        .btn {
+            width: 100%; /* Lebar tombol 100% */
+            height: 40px; 
+            background-color: black;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: Courier;
+        }
+         
+
+        #result {
+            display: none; /* Tampilan awalnya disembunyikan */
+            margin-top: 20px;
+            padding: 10px;
+            
+            color: inherit;
+            border: 2px solid black;
+            border-radius: 5px;
+        }
+
+        /* Style untuk menu kembali */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: Courier;
+            text-decoration: none;
+            color: inherit; /* Warisan warna teks dari elemen induk */              
+            font-weight: bold;
+            color: white;
+        }
+        .page-title {
+            text-align: center;
+            margin-top: 55px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Tambahkan menu kembali -->
+    <a href="beranda.html" class="back-button" onclick="rotateAndRedirect(event)">
+        <i class="fas fa-arrow-left"></i> Back
+    </a>
+
+    <h1 class="page-title"> Tip Calculator </h1>
+    
+    <div class="container">
+        
+        <form id="form">
+            <div class="form-group">
+                <label for="bill">Bill Amount</label>
+                <input
+                    type="number"
+                    id="bill"
+                    required
+                    placeholder="Enter BILL AMOUNT"
+                />
+            </div>
+            <div class="form-group">
+                <label for="tip">Tip</label>
+                <input
+                    type="number"
+                    id="tip"
+                    required
+                    placeholder="Enter TIP"
+                />
+            </div>
+            <div class="form-group">
+                <label for="people">Number of People</label>
+                <input
+                    type="number"
+                    id="people"
+                    required
+                    placeholder="Enter NUMBER OF PEOPLE"
+                />
+            </div>
+            <button type="submit" class="btn">Calculate</button>
+        </form>
+        <div id="result" class="mt-3"></div>
+    </div>
+
+    <script>
+        var form = document.getElementById("form");
+        var bill = document.getElementById("bill");
+        var tip = document.getElementById("tip");
+        var people = document.getElementById("people");
+        var result = document.getElementById("result");
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            var billValue = bill.value;
+            var tipValue = tip.value;
+            var peopleValue = people.value;
+
+            var totalAmountInt =
+                parseInt(billValue) +
+                (parseInt(billValue) * parseInt(tipValue)) / 100;
+            var tipAmountInt = (parseInt(billValue) * parseInt(tipValue)) / 100;
+
+            var perPersonInt =
+                parseFloat(totalAmountInt) / parseInt(peopleValue);
+
+            result.innerHTML = `<div class="alert alert-success"> 
+                                <p style="margin-bottom: -10px; margin-top: -1px;"><strong>Tip Amount : </strong> ${tipAmountInt.toFixed(2)}</p>
+                                <p style="margin-bottom: -10px;"><strong>Total Amount : </strong> ${totalAmountInt.toFixed(2)}</p>
+                                <p style="margin-bottom: -1px;"><strong>Total Per Person : </strong> ${perPersonInt.toFixed(2)}</p>
+                            </div>`;
+
+            result.style.display = "block"; // Menampilkan hasil setelah tombol ditekan
+        });
+
+        // Fungsi untuk mengatur animasi putar dan mengarahkan ke halaman selanjutnya
+        function rotateAndRedirect(event) {
+            event.preventDefault(); // Menghentikan peristiwa klik agar navigasi tidak terjadi segera
+            const backButton = document.querySelector(".back-button");
+            
+            // Mengaktifkan animasi putar
+            backButton.style.transition = "transform 1s ease";
+            backButton.style.transform = "rotate(360deg)";
+
+            // Menunda navigasi ke halaman "beranda.html" untuk memberikan efek animasi
+            setTimeout(function() {
+                window.location.href = backButton.getAttribute("href");
+            }, 1000); // Waktu dalam milidetik (1 detik untuk animasi putar)
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+        crossorigin="anonymous" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <title> inline | Word Counter </title>
+
+    <style>
+        * {
+            font-family: Courier;
+        }
+
+        body {
+            background-color: black;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1, h2, h3, h4, h5, h6, p {
+            font-family: Courier;
+            color: black;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid white;
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 350px;
+            height: 333px;
+        }
+
+        .message {
+            border: 2px solid black;
+            border-radius: 7px;
+            padding: 8px;
+            margin-top: 4px;
+            outline: none;
+            width: 100%;
+            height: 269px;
+        }
+
+        /* Media Query untuk perubahan tampilan pada layar kecil */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+        }
+
+        /* Style untuk menu kembali */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: Courier;
+            text-decoration: none;
+            color: inherit;
+            font-weight: bold;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <!-- Tambahkan menu kembali -->
+    <a href="beranda.html" class="back-button" onclick="rotateAndRedirect(event)"><i class="fas fa-arrow-left"></i> Back</a>
+
+    <h1 
+        style="
+            position: absolute; 
+            text-align: center;
+            top: 30px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            color: white;">Word Counter
+    </h1>
+    
+    <div class="container">
+        <!-- <h1>Word Counter</h1> -->
+        <textarea name="message" class="message" id="message" cols="50" rows="9" placeholder="Enter MESSAGE"
+            oninput="updateCount()"></textarea>
+
+        <p>
+            <span id="word-count">0</span> words |
+            <span id="character-count">0</span> characters
+        </p>
+    </div>
+
+    <script>
+        const updateCount = () => {
+            let message = document.getElementById("message").value;
+
+            let wordCount = (message).split(' ').length;
+
+            document.getElementById("word-count").innerText = wordCount;
+            document.getElementById("character-count").innerText = message.length;
+        };
+
+        // Function to apply rotation animation and then redirect
+        function rotateAndRedirect(event) {
+            event.preventDefault(); // Prevent immediate navigation
+            const backButton = document.querySelector(".back-button");
+
+            // Apply the rotation animation
+            backButton.style.transition = "transform 1s ease";
+            backButton.style.transform = "rotate(360deg)";
+
+            // Delay the navigation to allow the rotation animation to complete
+            setTimeout(function () {
+                window.location.href = backButton.getAttribute("href"); // Redirect to the target page
+            }, 1000); // 1000 milliseconds (1 second) delay for the rotation animation
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; width: 100%; }
+        body { background: black; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .clock { height: 10vh; color: white; font-size: 10vh; font-family: Courier; line-height: 10vh; display: flex; position: relative; overflow: hidden; }
+        .clock::before, .clock::after { content: ""; width: 3ch; height: 1.5vh; background: linear-gradient(to top, transparent, black); position: absolute; z-index: 2; }
+        .clock::after { bottom: 0; background: linear-gradient(to bottom, transparent, black); }
+        .clock > div { display: flex; }
+        .tick { line-height: 7.5vh; }
+        .tick-hidden { opacity: 0; }
+        .move { animation: move linear 1s infinite; }
+        #klik { background-color: white; color: black; font-family: Courier; border: none; padding: 5px 10px; margin-top: 10px; cursor: pointer; border-radius: 20px; }
+        #klik:hover { color: black; }
+        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .balloon { font-size: 36px; cursor: pointer; position: fixed; top: 15%; left: 50%; transform: translateX(-50%); animation: floatUp 4s ease-in-out infinite; z-index: 9999; }
+        @keyframes floatUp { 0% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -20px); } 100% { transform: translate(-50%, 0); } }
+        @keyframes pop { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
+    </style>
+    <title> inline </title>
+</head>
+<body>
+    <div class="clock">
+        <div class="balloon" id="balloon" onclick="popBalloon()">🎈</div>
+        <div class="hours">
+            <div class="first">
+                <div class="number">0</div>
+            </div>
+            <div class="second">
+                <div class="number">0</div>
+            </div>
+        </div>
+        <div class="tick">:</div>
+        <div class="minutes">
+            <div class="first">
+                <div class="number">0</div>
+            </div>
+            <div class="second">
+                <div class="number">0</div>
+            </div>
+        </div>
+        <div class="tick">:</div>
+        <div class="seconds">
+            <div class="first">
+                <div class="number">0</div>
+            </div>
+            <div class="second infinite">
+                <div class="number">0</div>
+            </div>
+        </div>
+    </div>
+    <button id="klik" onclick="rotateAndRedirect()">Click Here</button>
+    <script>
+        function rotateAndRedirect() {
+            const button = document.getElementById("klik");
+            button.style.animation = "rotate 1s linear";
+            setTimeout(function () {
+                window.location.href = "beranda.html";
+            }, 1000);
+        }
+    </script>
+    <script>
+        var hoursContainer = document.querySelector('.hours');
+        var minutesContainer = document.querySelector('.minutes');
+        var secondsContainer = document.querySelector('.seconds');
+        var tickElements = Array.from(document.querySelectorAll('.tick'));
+        var last = new Date(0);
+        last.setUTCHours(-1);
+        var tickState = true;
+        function updateTime() {
+            var now = new Date();
+            var lastHours = last.getHours().toString();
+            var nowHours = now.getHours().toString();
+            if (lastHours !== nowHours) {
+                updateContainer(hoursContainer, nowHours);
+            }
+            var lastMinutes = last.getMinutes().toString();
+            var nowMinutes = now.getMinutes().toString();
+            if (lastMinutes !== nowMinutes) {
+                updateContainer(minutesContainer, nowMinutes);
+            }
+            var lastSeconds = last.getSeconds().toString();
+            var nowSeconds = now.getSeconds().toString();
+            if (lastSeconds !== nowSeconds) {
+                updateContainer(secondsContainer, nowSeconds);
+            }
+            last = now;
+        }
+        function tick() {
+            tickElements.forEach(t => t.classList.toggle('tick-hidden'));
+        }
+        function updateContainer(container, newTime) {
+            var time = newTime.split('');
+            if (time.length === 1) {
+                time.unshift('0');
+            }
+            var first = container.firstElementChild;
+            if (first.lastElementChild.textContent !== time[0]) {
+                updateNumber(first, time[0]);
+            }
+            var last = container.lastElementChild;
+            if (last.lastElementChild.textContent !== time[1]) {
+                updateNumber(last, time[1]);
+            }
+        }
+        function updateNumber(element, number) {
+            var second = element.lastElementChild.cloneNode(true);
+            second.textContent = number;
+            element.appendChild(second);
+            element.classList.add('move');
+            setTimeout(function () {
+                element.classList.remove('move');
+            }, 990);
+            setTimeout(function () {
+                element.removeChild(element.firstElementChild);
+            }, 990);
+        }
+        setInterval(updateTime, 100);
+    </script>
+    <script>
+        function popBalloon() {
+            const balloon = document.getElementById("balloon");
+            balloon.style.animation = "pop 0.3s ease-in-out";
+            balloon.style.transform = "scale(0)";
+            setTimeout(function () { 
+                window.open("https://www.instagram.com/iwann.wn/", "_blank");
+            }, 300);
+        }
+    </script>
+</body>
+</html>
